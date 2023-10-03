@@ -1,10 +1,12 @@
 package edu.temple.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -23,8 +25,15 @@ class MainActivity : AppCompatActivity() {
         with (findViewById(R.id.textSizeSelectorRecyclerView) as RecyclerView) {
 
             // TODO Step2: Implement lambda body to launch new activity and pass value
-            adapter = TextSizeAdapter(textSizes){
+            adapter = TextSizeAdapter(textSizes){selectedValue ->
+                // Create an Intent to launch a new activity (you should replace NewActivity::class.java with your actual destination activity)
+                val launchIntent = Intent(this@MainActivity, DisplayActivity::class.java)
 
+                // Pass the selected value to the new activity using Intent extras
+                launchIntent.putExtra("selectedValue", selectedValue)
+
+                // Start the new activity
+                context.startActivity(launchIntent)
             }
             layoutManager = LinearLayoutManager(this@MainActivity)
         }
@@ -40,8 +49,12 @@ class TextSizeAdapter (private val textSizes: Array<Int>, callback: (Int)->Unit)
 
     // TODO Step 1: Complete onClickListener to return selected number
     inner class TextSizeViewHolder(val textView: TextView) : RecyclerView.ViewHolder (textView) {
-        init {
-            textView.setOnClickListener {  }
+        inner class TextSizeViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView) {
+            init {
+                textView.setOnClickListener {
+                    val selectedValue = textSizes[adapterPosition] // Get the selected number from the array
+                }
+            }
         }
     }
 
